@@ -32,29 +32,40 @@
 *  OTHER DEALINGS IN THE SOFTWARE.
 *  
 *  --------------------------------------------------------------
-*  HARDWARE NECESSARIO :
 *  
-*  1x Arduino UNO
-*  1x Arduino CNC SHIELD v3
-*  2x Stepper Driver : DRV8825 o A4988
-*  2x Motori Stepper
-*  3x Micro Interruttori
-*  
-*  --------------------------------------------------------------
-*  LIBRERIE NESECESSARIE :    
-*  
-*  AccelStepper 1.61.0 -> https://github.com/swissbyte/AccelStepper
-*  
-*  --------------------------------------------------------------    
 */
+// --------------------------------------------------------------
 
-#include "main.h"
+// --------------------------------------------------------------
+//                        CONFIGURAZIONE
+// --------------------------------------------------------------
 
-void setup() {
-  mainSetup(); 
-}
 
-void loop() {
-  // put your main code here, to run repeatedly:
-
-}
+// --------------------------------------------------------------
+// MOTORE X
+// --------------------------------------------------------------
+#define MOTOR_X_INTERFACE AccelStepper::DRIVER
+#define MOTOR_X_ACCELERATION 5000
+#define MOTOR_X_MAX_SPEED 500
+#define MOTOR_X_SPEED 100
+// --------------------------------------------------------------
+// MOTORE Y
+// --------------------------------------------------------------
+#define MOTOR_Y_INTERFACE AccelStepper::DRIVER
+#define MOTOR_Y_ACCELERATION 5000
+#define MOTOR_Y_MAX_SPEED 500
+#define MOTOR_Y_SPEED 100
+// --------------------------------------------------------------
+// MOTORE Z
+// --------------------------------------------------------------
+#define MOTOR_Z_INTERFACE AccelStepper::DRIVER
+#define MOTOR_Z_ACCELERATION 5000
+#define MOTOR_Z_MAX_SPEED 500
+#define MOTOR_Z_SPEED 100
+// --------------------------------------------------------------
+// MOTORE A
+// --------------------------------------------------------------
+#define MOTOR_A_INTERFACE AccelStepper::DRIVER
+#define MOTOR_A_ACCELERATION 5000
+#define MOTOR_A_MAX_SPEED 500
+#define MOTOR_A_SPEED 100

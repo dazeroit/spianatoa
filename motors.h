@@ -1,5 +1,5 @@
 /**   
-*             _                   _  _   _  
+*            _                   _  _   _  
 *   ___ _ __ (_) __ _ _ __   __ _| |(_)_(_) __ _ 
 *  / __| '_ \| |/ _` | '_ \ / _` | __/ _ \ / _` |
 *  \__ \ |_) | | (_| | | | | (_| | || (_) | (_| |
@@ -32,29 +32,35 @@
 *  OTHER DEALINGS IN THE SOFTWARE.
 *  
 *  --------------------------------------------------------------
-*  HARDWARE NECESSARIO :
 *  
-*  1x Arduino UNO
-*  1x Arduino CNC SHIELD v3
-*  2x Stepper Driver : DRV8825 o A4988
-*  2x Motori Stepper
-*  3x Micro Interruttori
-*  
-*  --------------------------------------------------------------
-*  LIBRERIE NESECESSARIE :    
-*  
-*  AccelStepper 1.61.0 -> https://github.com/swissbyte/AccelStepper
-*  
-*  --------------------------------------------------------------    
 */
 
-#include "main.h"
+AccelStepper MotorX(MOTOR_X_INTERFACE,MOTOR_X_STEP_PIN,MOTOR_X_DIR_PIN);
+AccelStepper MotorY(MOTOR_Y_INTERFACE,MOTOR_Y_STEP_PIN,MOTOR_Y_DIR_PIN);
+//AccelStepper MotorZ(MOTOR_Z_INTERFACE,MOTOR_Z_STEP_PIN,MOTOR_Z_DIR_PIN);
+//AccelStepper MotorA(MOTOR_A_INTERFACE,MOTOR_A_STEP_PIN,MOTOR_A_DIR_PIN);
 
-void setup() {
-  mainSetup(); 
+void setupMotors() {
+
+    MotorX.setAcceleration(MOTOR_X_ACCELERATION);
+    MotorX.setMaxSpeed(MOTOR_X_MAX_SPEED);
+    MotorX.setSpeed(MOTOR_X_SPEED);
+    MotorX.disableOutputs();
+
+    MotorY.setAcceleration(MOTOR_Y_ACCELERATION);
+    MotorY.setMaxSpeed(MOTOR_Y_MAX_SPEED);
+    MotorY.setSpeed(MOTOR_Y_SPEED);
+    MotorY.disableOutputs();
+    
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
 
-}
+void homeAxisX() {}
+void homeAxisY() {}
+void homeAllAxis() {}
+
+void moveAxisX() {}
+void moveAxisY() {}
+
+void stopAxisX() {}
+void stopAxisY() {}

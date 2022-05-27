@@ -32,29 +32,41 @@
 *  OTHER DEALINGS IN THE SOFTWARE.
 *  
 *  --------------------------------------------------------------
-*  HARDWARE NECESSARIO :
 *  
-*  1x Arduino UNO
-*  1x Arduino CNC SHIELD v3
-*  2x Stepper Driver : DRV8825 o A4988
-*  2x Motori Stepper
-*  3x Micro Interruttori
-*  
-*  --------------------------------------------------------------
-*  LIBRERIE NESECESSARIE :    
-*  
-*  AccelStepper 1.61.0 -> https://github.com/swissbyte/AccelStepper
-*  
-*  --------------------------------------------------------------    
 */
 
-#include "main.h"
+#define BOARD_TYPE CNC_SHIELD_V3
 
-void setup() {
-  mainSetup(); 
-}
+#define MOTOR_X_ENABLE_PIN 8
+#define MOTOR_Y_ENABLE_PIN MOTOR_X_ENABLE_PIN
+#define MOTOR_Z_ENABLE_PIN MOTOR_X_ENABLE_PIN
+#define MOTOR_A_ENABLE_PIN MOTOR_X_ENABLE_PIN
 
-void loop() {
-  // put your main code here, to run repeatedly:
+#define MOTOR_X_ENABLE_INVERT false
+#define MOTOR_Y_ENABLE_INVERT MOTOR_X_ENABLE_INVERT
+#define MOTOR_Z_ENABLE_INVERT MOTOR_X_ENABLE_INVERT
+#define MOTOR_A_ENABLE_INVERT MOTOR_X_ENABLE_INVERT
 
-}
+#define MOTOR_X_STEP_INVERT false
+#define MOTOR_Y_STEP_INVERT false
+#define MOTOR_Z_STEP_INVERT false
+#define MOTOR_A_STEP_INVERT false
+
+#define MOTOR_X_DIR_INVERT false
+#define MOTOR_Y_DIR_INVERT false
+#define MOTOR_Z_DIR_INVERT false
+#define MOTOR_A_DIR_INVERT false
+
+#define MOTOR_X_STEP_PIN 2
+#define MOTOR_Y_STEP_PIN 3
+#define MOTOR_Z_STEP_PIN 4
+#define MOTOR_A_STEP_PIN 12
+
+#define MOTOR_X_DIR_PIN 5
+#define MOTOR_Y_DIR_PIN 6
+#define MOTOR_Z_DIR_PIN 7
+#define MOTOR_A_DIR_PIN 13
+
+#define ENDSTOP_X_PIN 9
+#define ENDSTOP_Y_PIN 10
+#define ENDSTOP_Z_PIN 11

@@ -32,29 +32,18 @@
 *  OTHER DEALINGS IN THE SOFTWARE.
 *  
 *  --------------------------------------------------------------
-*  HARDWARE NECESSARIO :
 *  
-*  1x Arduino UNO
-*  1x Arduino CNC SHIELD v3
-*  2x Stepper Driver : DRV8825 o A4988
-*  2x Motori Stepper
-*  3x Micro Interruttori
-*  
-*  --------------------------------------------------------------
-*  LIBRERIE NESECESSARIE :    
-*  
-*  AccelStepper 1.61.0 -> https://github.com/swissbyte/AccelStepper
-*  
-*  --------------------------------------------------------------    
 */
 
-#include "main.h"
+#include <AccelStepper.h>
+#include "board.h"
+#include "config.h"
+#include "motors.h"
 
-void setup() {
-  mainSetup(); 
+void mainSetup() {
+    setupMotors();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void mainLoop() {
 
 }
