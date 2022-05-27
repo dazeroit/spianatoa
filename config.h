@@ -69,3 +69,17 @@
 #define MOTOR_A_ACCELERATION 5000
 #define MOTOR_A_MAX_SPEED 500
 #define MOTOR_A_SPEED 100
+
+// --------------------------------------------------------------
+// FINECORSA
+// --------------------------------------------------------------
+
+#define ENDSTOP_X_ACTIVE_STATE HIGH
+#define ENDSTOP_Y_ACTIVE_STATE HIGH
+
+// --------------------------------------------------------------
+// LOGIC
+// --------------------------------------------------------------
+
+#define Y_TRAVEL_DISTANCE 500
+#define MAX_NUMBER_OF_STATE 2

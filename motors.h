@@ -37,8 +37,8 @@
 
 AccelStepper MotorX(MOTOR_X_INTERFACE,MOTOR_X_STEP_PIN,MOTOR_X_DIR_PIN);
 AccelStepper MotorY(MOTOR_Y_INTERFACE,MOTOR_Y_STEP_PIN,MOTOR_Y_DIR_PIN);
-//AccelStepper MotorZ(MOTOR_Z_INTERFACE,MOTOR_Z_STEP_PIN,MOTOR_Z_DIR_PIN);
-//AccelStepper MotorA(MOTOR_A_INTERFACE,MOTOR_A_STEP_PIN,MOTOR_A_DIR_PIN);
+
+long y_multiplier = 1 ;
 
 void setupMotors() {
 
@@ -55,12 +55,33 @@ void setupMotors() {
 }
 
 
-void homeAxisX() {}
-void homeAxisY() {}
-void homeAllAxis() {}
+void homeAxisX() {
+    MotorX.setCurrentPosition(0);
+}
+void homeAxisY() {
+    MotorY.setCurrentPosition(0);
+}
+void homeAllAxis() {
+    homeAxisX();
+    homeAxisY();
+}
 
-void moveAxisX() {}
-void moveAxisY() {}
+void moveAxisX() {
+    MotorX.runSpeed();
+}
 
-void stopAxisX() {}
-void stopAxisY() {}
+void moveAxisY() {
+    MotorY.moveTo(Y_TRAVEL_DISTANCE * y_multiplier);
+    MotorY.run();
+}
+
+void incrementYMultiplier(){
+    y_multiplier++;
+}
+
+void stopAxisX() {
+    MotorX.stop();
+}
+void stopAxisY() {
+    MotorY.stop();
+}

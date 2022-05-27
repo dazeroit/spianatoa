@@ -40,10 +40,108 @@
 #include "config.h"
 #include "motors.h"
 
+long next_step = 0;
+bool invert = false;
+bool active = false;
+int current_state = 0;
+long current_x_position = 0;
+long current_y_position = 0;
+
 void mainSetup() {
     setupMotors();
 }
 
 void mainLoop() {
+    checkInputs();
+    checkMotion();
+}
 
+void checkInputs(){
+    checkStopSwitch();
+    checkStopRequest();
+    checkDirection();
+    checkStartRequest();
+}
+
+void checkMotion() {
+    if(active){
+        stateControl();
+    }
+}
+
+void checkDirection() {
+    if(digitalRead(ENDSTOP_X_PIN) == ENDSTOP_X_ACTIVE_STATE){
+        invert = !invert;
+        current_state = 1;
+    }
+}
+
+void checkStopSwitch(){
+    if(digitalRead(ENDSTOP_Y_PIN) == ENDSTOP_Y_ACTIVE_STATE){
+        stopMotion();
+    }
+}
+
+void checkStopRequest() {
+    if(digitalRead(STOP_BUTTON_PIN) == STOP_BUTTON_ACTIVE_STATE){
+        stopMotion();
+    }
+}
+
+void checkStartRequest() {
+    if(digitalRead(START_BUTTON_PIN) == START_BUTTON_ACTIVE_STATE){
+        startMotion();
+    }
+}
+
+void stopMotion() {
+    active = false;
+}
+
+void startMotion() {
+    if(!active){
+        homeAllAxis();
+        current_x_position = 0;
+        current_y_position = 0;
+        active = true;
+    }
+}
+
+void stateControl() {
+    switch(current_state){
+        case 0:
+            state0();
+            break;
+        case 1:
+            state1();
+            break;
+        case 2:
+            state2();
+            break;
+    }
+}
+
+void state0() {
+    if(invert){
+        MotorX.setSpeed(-MOTOR_X_SPEED);
+    }else{
+        MotorX.setSpeed(MOTOR_X_SPEED);
+    }
+    moveAxisX();
+}
+
+void state1() {
+    stopAxisX();
+    current_state++;
+    delay(500);
+}
+
+void state2() {
+    moveAxisY();
+    if(MotorY.distanceToGo() == 0){
+        stopAxisY();
+        incrementYMultiplier();
+        current_state = 0;
+        delay(500);
+    }
 }
