@@ -48,12 +48,214 @@
 *  --------------------------------------------------------------    
 */
 
-#include "main.h"
+#include <AccelStepper.h>
+#include <Button.h>
+#include "board.h"
+#include "config.h"
 
-void setup() {
-  mainSetup(); 
+#define DEBUG
+
+AccelStepper MotorX(MOTOR_X_INTERFACE,MOTOR_X_STEP_PIN,MOTOR_X_DIR_PIN);
+AccelStepper MotorY(MOTOR_Y_INTERFACE,MOTOR_Y_STEP_PIN,MOTOR_Y_DIR_PIN);
+
+Button endstopX(ENDSTOP_X_PIN);
+Button endstopY(ENDSTOP_Y_PIN);
+Button startButton(START_BUTTON_PIN);
+Button stopButton(STOP_BUTTON_PIN);
+
+static uint_8 currentState = 0;
+volatile bool enableMotion = false;
+bool isMotorEnabled = false;
+// --------------------------------------------------------------
+// SETUP INGRESSI/USCITE
+// --------------------------------------------------------------
+void setupIO(){
+  pinMode(MOTOR_ENABLE_PIN,OUTPUT);
+  pinMode(ENDSTOP_X_PIN,ENDSTOP_X_MODE);
+  pinMode(ENDSTOP_Y_PIN,ENDSTOP_Y_MODE);
+  pinMode(START_BUTTON_PIN,START_BUTTON_MODE);
+  pinMode(STOP_BUTTON_PIN,STOP_BUTTON_MODE);
+  
+  endstopX.begin();
+  endstopY.begin();
+  startButton.begin();
+  stopButton.begin();
+
+  #if defined(DEBUG)
+    Serial.println("setupIO checked");
+  #endif
+}
+// --------------------------------------------------------------
+// SETUP MOTORI
+// --------------------------------------------------------------
+void setupSteppers(){
+  MotorX.setEnablePin(MOTOR_ENABLE_PIN);
+  MotorX.setPinsInverted(false, false, true);
+  MotorX.setAcceleration(MOTOR_X_ACCELERATION);
+  MotorX.setMaxSpeed(MOTOR_X_MAX_SPEED);
+  MotorX.setSpeed(MOTOR_X_SPEED);
+
+  MotorY.setEnablePin(MOTOR_ENABLE_PIN);
+  MotorY.setPinsInverted(false, false, true);
+  MotorY.setAcceleration(MOTOR_X_ACCELERATION);
+  MotorY.setMaxSpeed(MOTOR_Y_MAX_SPEED);
+  MotorY.setSpeed(MOTOR_Y_SPEED);
+
+  #if defined(DEBUG)
+    Serial.println("setupStepper checked");
+  #endif
+}
+void checkEndstopY() {
+  if(endstopY.pressed()){
+    enableMotion = false ;
+  }
+}
+bool checkEndstopX() {
+  bool pressed = endstopX.pressed();
+  if(pressed){
+    float currentSpeed = MotorX.speed();
+    if(currentSpeed > 0){
+      currentSpeed = -MOTOR_X_SPEED ;
+    }else{
+      currentSpeed = MOTOR_X_SPEED ;
+    }
+    MotorX.setSpeed(currentSpeed);
+  }
+  return pressed;
 }
 
+void stopMotorX() {
+  #if defined(DEBUG)
+    Serial.println("stopMotorX...");
+  #endif
+  if(MotorX.isRunning()){
+    #if defined(DEBUG)
+      Serial.println("stopMotorX checked");
+    #endif
+    MotorX.stop();
+    MotorY.move(MOTOR_Y_TRAVEL_DISTANCE);
+    currentState++;
+  }
+}
+
+void startMotorX() {
+  #if defined(DEBUG)
+    Serial.println("startMotorX");
+  #endif
+  MotorX.runSpeed();
+}
+
+void stopMotorY() {
+  #if defined(DEBUG)
+    Serial.println("stopMotorY...");
+  #endif
+  if(MotorY.isRunning()){
+    #if defined(DEBUG)
+      Serial.println("stopMotorY checked");
+    #endif
+    MotorY.stop();
+    currentState++;
+  }
+}
+void startMotorY() {
+  #if defined(DEBUG)
+    Serial.println("startMotorY");
+  #endif
+  if(MotorY.distanceToGo() == 0){
+    currentState++;
+  }
+  MotorY.run();
+}
+
+void startMotion() {
+  #if defined(DEBUG)
+    Serial.println(">>>> START MOTION");
+  #endif
+  if(!isMotorEnabled){
+    MotorX.enableOutputs();
+    MotorX.setCurrentPosition(0);
+    MotorY.enableOutputs();
+    MotorY.setCurrentPosition(0);
+    isMotorEnabled = true;
+  }
+  #if defined(DEBUG)
+    Serial.print("CURRENT STATE : ");Serial.println(currentState);
+  #endif
+  switch(currentState){
+    case 0:
+      startMotorX();
+      if(checkEndstopX()){
+        currentState++;
+      }
+      break;
+    case 1:
+      stopMotorX();
+      break;
+    case 2:
+      startMotorY();
+      break;
+    case 3:
+      stopMotorY();
+      break;
+  }
+  if(currentState > 3){
+    currentState = 0;
+  }
+}
+void stopMotion() {
+  #if defined(DEBUG)
+    Serial.println(">>>> STOP MOTION");
+  #endif
+  MotorX.stop();
+  MotorY.stop();
+  MotorX.disableOutputs();
+  MotorY.disableOutputs();
+  isMotorEnabled = false ;
+  currentState = 0;
+}
+void readInputs() {
+  #if defined(DEBUG)
+    Serial.println("readInputs");
+  #endif
+  if(startButton.pressed()){
+    enableMotion = true ;
+  }
+  if(stopButton.pressed()){
+    enableMotion = false ;
+  }
+   #if defined(DEBUG)
+    Serial.print("enableMotion -> ");Serial.println(enableMotion);
+  #endif
+}
+// --------------------------------------------------------------
+// MAIN SETUP 
+// --------------------------------------------------------------
+void setup() {
+  #if defined(DEBUG)
+    Serial.begin(9600);
+  #endif
+  setupIO();
+  setupSteppers();
+  #if defined(DEBUG)
+    Serial.println("main setup checked");
+  #endif
+}
+// --------------------------------------------------------------
+// MAIN LOOP
+// --------------------------------------------------------------
 void loop() {
-  mainLoop();
+  #if defined(DEBUG)
+    Serial.println(">>> begin main loop <<<");
+  #endif
+  readInputs();
+  checkEndstopY();
+  if(enableMotion){
+    startMotion();
+  }else{
+    stopMotion();
+  }
+  #if defined(DEBUG)
+    Serial.println(">>> end main loop <<<");
+    Serial.println("");
+  #endif
 }

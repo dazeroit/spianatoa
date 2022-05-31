@@ -45,41 +45,15 @@
 // MOTORE X
 // --------------------------------------------------------------
 #define MOTOR_X_INTERFACE AccelStepper::DRIVER
-#define MOTOR_X_ACCELERATION 5000
+#define MOTOR_X_ACCELERATION 500
 #define MOTOR_X_MAX_SPEED 500
 #define MOTOR_X_SPEED 100
 // --------------------------------------------------------------
 // MOTORE Y
 // --------------------------------------------------------------
 #define MOTOR_Y_INTERFACE AccelStepper::DRIVER
-#define MOTOR_Y_ACCELERATION 5000
+#define MOTOR_Y_ACCELERATION 500
 #define MOTOR_Y_MAX_SPEED 500
 #define MOTOR_Y_SPEED 100
-// --------------------------------------------------------------
-// MOTORE Z
-// --------------------------------------------------------------
-#define MOTOR_Z_INTERFACE AccelStepper::DRIVER
-#define MOTOR_Z_ACCELERATION 5000
-#define MOTOR_Z_MAX_SPEED 500
-#define MOTOR_Z_SPEED 100
-// --------------------------------------------------------------
-// MOTORE A
-// --------------------------------------------------------------
-#define MOTOR_A_INTERFACE AccelStepper::DRIVER
-#define MOTOR_A_ACCELERATION 5000
-#define MOTOR_A_MAX_SPEED 500
-#define MOTOR_A_SPEED 100
 
-// --------------------------------------------------------------
-// FINECORSA
-// --------------------------------------------------------------
-
-#define ENDSTOP_X_ACTIVE_STATE HIGH
-#define ENDSTOP_Y_ACTIVE_STATE HIGH
-
-// --------------------------------------------------------------
-// LOGIC
-// --------------------------------------------------------------
-
-#define Y_TRAVEL_DISTANCE 500
-#define MAX_NUMBER_OF_STATE 2
+#define MOTOR_Y_TRAVEL_DISTANCE 500
