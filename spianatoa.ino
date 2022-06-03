@@ -44,6 +44,7 @@
 *  LIBRERIE NESECESSARIE :    
 *  
 *  AccelStepper 1.61.0 -> https://github.com/swissbyte/AccelStepper
+*  Button 1.0.0 -> https://downloads.arduino.cc/libraries/github.com/madleech/Button-1.0.0.zip
 *  
 *  --------------------------------------------------------------    
 */
@@ -53,7 +54,7 @@
 #include "board.h"
 #include "config.h"
 
-#define DEBUG
+//#define DEBUG
 
 AccelStepper MotorX(MOTOR_X_INTERFACE,MOTOR_X_STEP_PIN,MOTOR_X_DIR_PIN);
 AccelStepper MotorY(MOTOR_Y_INTERFACE,MOTOR_Y_STEP_PIN,MOTOR_Y_DIR_PIN);
@@ -63,7 +64,7 @@ Button endstopY(ENDSTOP_Y_PIN);
 Button startButton(START_BUTTON_PIN);
 Button stopButton(STOP_BUTTON_PIN);
 
-static uint_8 currentState = 0;
+static uint8_t currentState = 0;
 volatile bool enableMotion = false;
 bool isMotorEnabled = false;
 // --------------------------------------------------------------
@@ -105,11 +106,17 @@ void setupSteppers(){
     Serial.println("setupStepper checked");
   #endif
 }
+// --------------------------------------------------------------
+// CONTROLLO FINECORSA Y
+// --------------------------------------------------------------
 void checkEndstopY() {
   if(endstopY.pressed()){
     enableMotion = false ;
   }
 }
+// --------------------------------------------------------------
+// CONTROLLO FINECORSA X
+// --------------------------------------------------------------
 bool checkEndstopX() {
   bool pressed = endstopX.pressed();
   if(pressed){
@@ -123,7 +130,9 @@ bool checkEndstopX() {
   }
   return pressed;
 }
-
+// --------------------------------------------------------------
+// STOP MOROR X
+// --------------------------------------------------------------
 void stopMotorX() {
   #if defined(DEBUG)
     Serial.println("stopMotorX...");
@@ -137,36 +146,47 @@ void stopMotorX() {
     currentState++;
   }
 }
-
+// --------------------------------------------------------------
+// START MOTOR X
+// --------------------------------------------------------------
 void startMotorX() {
   #if defined(DEBUG)
     Serial.println("startMotorX");
+    Serial.print("motor x speed : ");Serial.println(MotorX.speed());
   #endif
   MotorX.runSpeed();
 }
-
+// --------------------------------------------------------------
+// STOP MOTOR Y
+// --------------------------------------------------------------
 void stopMotorY() {
   #if defined(DEBUG)
     Serial.println("stopMotorY...");
   #endif
-  if(MotorY.isRunning()){
+  //if(MotorY.isRunning()){
     #if defined(DEBUG)
       Serial.println("stopMotorY checked");
     #endif
     MotorY.stop();
     currentState++;
-  }
+  //}
 }
+// --------------------------------------------------------------
+// START MOTOR Y
+// --------------------------------------------------------------
 void startMotorY() {
   #if defined(DEBUG)
     Serial.println("startMotorY");
+    Serial.print("motor y distance to go : ");Serial.println(MotorY.distanceToGo());
   #endif
   if(MotorY.distanceToGo() == 0){
     currentState++;
   }
   MotorY.run();
 }
-
+// --------------------------------------------------------------
+// START MOTION E CHECK STATI
+// --------------------------------------------------------------
 void startMotion() {
   #if defined(DEBUG)
     Serial.println(">>>> START MOTION");
@@ -202,6 +222,9 @@ void startMotion() {
     currentState = 0;
   }
 }
+// --------------------------------------------------------------
+// STOP MOTION
+// --------------------------------------------------------------
 void stopMotion() {
   #if defined(DEBUG)
     Serial.println(">>>> STOP MOTION");
@@ -213,6 +236,9 @@ void stopMotion() {
   isMotorEnabled = false ;
   currentState = 0;
 }
+// --------------------------------------------------------------
+// LETTURA INGRESSI
+// --------------------------------------------------------------
 void readInputs() {
   #if defined(DEBUG)
     Serial.println("readInputs");
@@ -233,6 +259,7 @@ void readInputs() {
 void setup() {
   #if defined(DEBUG)
     Serial.begin(9600);
+    Serial.println("DEBUG ATTIVO !");
   #endif
   setupIO();
   setupSteppers();
@@ -257,5 +284,6 @@ void loop() {
   #if defined(DEBUG)
     Serial.println(">>> end main loop <<<");
     Serial.println("");
+    delay(1000);
   #endif
 }

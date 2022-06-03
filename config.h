@@ -45,15 +45,15 @@
 // MOTORE X
 // --------------------------------------------------------------
 #define MOTOR_X_INTERFACE AccelStepper::DRIVER
-#define MOTOR_X_ACCELERATION 500
+#define MOTOR_X_ACCELERATION 5000
 #define MOTOR_X_MAX_SPEED 500
 #define MOTOR_X_SPEED 100
 // --------------------------------------------------------------
 // MOTORE Y
 // --------------------------------------------------------------
 #define MOTOR_Y_INTERFACE AccelStepper::DRIVER
-#define MOTOR_Y_ACCELERATION 500
+#define MOTOR_Y_ACCELERATION 5000
 #define MOTOR_Y_MAX_SPEED 500
 #define MOTOR_Y_SPEED 100
 
-#define MOTOR_Y_TRAVEL_DISTANCE 500
+#define MOTOR_Y_TRAVEL_DISTANCE 50
