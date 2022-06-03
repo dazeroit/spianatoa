@@ -67,6 +67,7 @@ Button stopButton(STOP_BUTTON_PIN);
 static uint8_t currentState = 0;
 volatile bool enableMotion = false;
 bool isMotorEnabled = false;
+float currentMotorXSpeed = MOTOR_X_SPEED;
 // --------------------------------------------------------------
 // SETUP INGRESSI/USCITE
 // --------------------------------------------------------------
@@ -122,11 +123,10 @@ bool checkEndstopX() {
   if(pressed){
     float currentSpeed = MotorX.speed();
     if(currentSpeed > 0){
-      currentSpeed = -MOTOR_X_SPEED ;
+      currentMotorXSpeed = -MOTOR_X_SPEED ;
     }else{
-      currentSpeed = MOTOR_X_SPEED ;
+      currentMotorXSpeed= MOTOR_X_SPEED ;
     }
-    MotorX.setSpeed(currentSpeed);
   }
   return pressed;
 }
@@ -154,6 +154,7 @@ void startMotorX() {
     Serial.println("startMotorX");
     Serial.print("motor x speed : ");Serial.println(MotorX.speed());
   #endif
+  MotorX.setSpeed(currentMotorXSpeed);
   MotorX.runSpeed();
 }
 // --------------------------------------------------------------
